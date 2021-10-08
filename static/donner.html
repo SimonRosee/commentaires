@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Donner son avis</title>
+
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="./node_modules/bootstrap//dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        .main {
+            margin-top: 100px;
+            margin-bottom: 50px;
+        }
+        nav .marge {
+            margin-right: 20px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="marge navbar-brand" href="./index.html">Maison</a>
+        </nav>
+    </header>
+
+    <div class="main container-fluid row">
+        <div class="col"></div>
+        <form class="col-6">
+            <div class="mb-3">
+              <label for="pseudo" class="form-label">Pseudo</label>
+              <input class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="titre" class="form-label">Titre</label>
+              <input class="form-control">
+            </div>            
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" rows="7"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Envoyer</button>
+          </form>
+          <div class="col"></div>
+    </div>
+
+    <footer class="footer fixed-bottom text-center bg-dark">
+        <p class="text-white">Le site qui permet de donner son avis.</p>
+    </footer>
+</body>
+
+</html>
