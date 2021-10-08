@@ -13,6 +13,7 @@
             margin-top: 100px;
             margin-bottom: 50px;
         }
+
         nav .marge {
             margin-right: 20px;
             margin-left: 20px;
@@ -29,27 +30,71 @@
 
     <div class="main container-fluid row">
         <div class="col"></div>
-        <form class="col-6">
+        <form id="form_avis" class="was-validated col-6">
             <div class="mb-3">
-              <label for="pseudo" class="form-label">Pseudo</label>
-              <input class="form-control">
+                <label for="pseudo" class="form-label">Pseudo</label>
+                <input class="form-control" id="pseudo" required>
             </div>
             <div class="mb-3">
-              <label for="titre" class="form-label">Titre</label>
-              <input class="form-control">
-            </div>            
+                <label for="titre" class="form-label">Titre</label>
+                <input class="form-control" id="titre" required>
+            </div>
             <div class="mb-3">
                 <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" rows="7"></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Envoyer</button>
-          </form>
-          <div class="col"></div>
+                <textarea class="form-control" rows="7" id="message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="bouton_envoi">Envoyer</button>
+        </form>
+        <div class="col"></div>
     </div>
 
     <footer class="footer fixed-bottom text-center bg-dark">
         <p class="text-white">Le site qui permet de donner son avis.</p>
     </footer>
+
+    <script>
+        document.querySelector("#bouton_envoi").addEventListener("click", (event) => {
+            if (!document.querySelector("#form_avis").checkValidity()) {
+                console.log("formulaire non envoyé")
+                event.preventDefault()
+
+                return
+            }
+            data = {
+                "pseudo": document.querySelector("#pseudo").value,
+                "titre": document.querySelector("#titre").value,
+                "message": document.querySelector("#message").value
+            }
+            fetch("/cookie/?pseudo=" + data.pseudo)
+
+            fetch("/api/create", {
+                'method': "POST",
+                'headers': {
+                    'Content-Type': 'application/json'
+                },
+                'body': JSON.stringify(data)
+            })
+
+            console.log(JSON.stringify(data, null, 2))
+            event.preventDefault()
+            location.reload()
+        })
+    </script>
+    <script>
+        function getCookie(name) {
+            var cookie, c;
+            cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                c = cookies[i].split('=');
+                if (c[0] == name) {
+                    return c[1];
+                }
+            }
+            return "";
+        }
+        
+        document.querySelector("#pseudo").value = decodeURI(getCookie("pseudo"))
+    </script>
 </body>
 
 </html>

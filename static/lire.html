@@ -13,6 +13,7 @@
             margin-top: 100px;
             margin-bottom: 50px;
         }
+
         nav .marge {
             margin-right: 20px;
             margin-left: 20px;
@@ -23,27 +24,127 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <a class="marge navbar-brand" href="./index.html">Maison</a>
-                <form class="navbar form-inline ms-auto row">
-                    <input class="form-control col" type="text" placeholder="Search" aria-label="Search">
-                    <button class="marge col-3 btn btn-outline-success" type="submit">Search</button>
-                </form>
+            <a class="marge navbar-brand" href="./index.html">Maison</a>
+            <form class="navbar form-inline ms-auto row">
+                <input id="pseudo" class="form-control col" type="text" placeholder="Search" aria-label="Search">
+                <button id="bouton_envoi" class="marge col-3 btn btn-outline-success" type="submit">Search</button>
+            </form>
         </nav>
     </header>
 
-    <div class="main container-fluid">
-        <div class="card">
+    <div class="main container-fluid" id="main">
+        <div>
+            <p>Chargement des commentaires...</p>
+        </div>
+        <!-- <div class="card">
             <div class="card-body">
-              <h5 class="card-title">titre du commentaire</h5>
-              <h6 class="card-subtitle mb-2 text-muted">pseudo</h6>
-              <p class="card-text">Contenu du commentaire.</p>
+                <h5 class="card-title">titre du commentaire</h5>
+                <h6 class="card-subtitle mb-2 text-muted">pseudo</h6>
+                <p class="card-text">Contenu du commentaire.</p>
             </div>
-          </div>
+        </div> -->
     </div>
 
     <footer class="footer fixed-bottom text-center bg-dark">
         <p class="text-white">Le site qui permet de donner son avis.</p>
     </footer>
+    <script>
+        main = document.querySelector("#main")
+        fetch("/api/read")
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data)
+                for (const message of data) {
+                    // console.log(message)
+
+                    card = document.createElement("div")
+                    card.classList.add("card")
+                    cardBody = document.createElement("div")
+                    cardBody.classList.add("card-body")
+                    card.appendChild(cardBody)
+
+                    element = document.createElement("h5")
+                    element.classList.add("card-title")
+                    element.innerText = message.titre
+                    cardBody.appendChild(element)
+
+                    element = document.createElement("h6")
+                    element.classList.add("card-subtitle", "mb-2", "text-muted")
+                    element.innerText = message.pseudo
+                    cardBody.appendChild(element)
+
+                    element = document.createElement("p")
+                    element.classList.add("card-text")
+                    element.innerText = message.message
+                    cardBody.appendChild(element)
+
+
+                    main.appendChild(card)
+                }
+            })
+    </script>
+        <script>
+            function getCookie(name) {
+                var cookie, c;
+                cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    c = cookies[i].split('=');
+                    if (c[0] == name) {
+                        return c[1];
+                    }
+                }
+                return "";
+            }
+            
+            document.querySelector("#pseudo").value = decodeURI(getCookie("pseudo"))
+        </script>
+    <script>
+        main = document.querySelector("#main")
+        document.querySelector("#bouton_envoi").addEventListener("click", (event) => {
+            pseudo = document.querySelector("#pseudo").value
+            if (!pseudo) {
+                url = "/api/read/"
+                console.log("prout")
+            } else {
+                url = "/api/read/?pseudo=" + pseudo
+            }
+            
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data)
+                main.textContent = "";
+                for (const message of data) {
+                    // console.log(message)
+                    
+                    card = document.createElement("div")
+                    card.classList.add("card")
+                    cardBody = document.createElement("div")
+                    cardBody.classList.add("card-body")
+                    card.appendChild(cardBody)
+
+                    element = document.createElement("h5")
+                    element.classList.add("card-title")
+                    element.innerText = message.titre
+                    cardBody.appendChild(element)
+
+                    element = document.createElement("h6")
+                    element.classList.add("card-subtitle", "mb-2", "text-muted")
+                    element.innerText = message.pseudo
+                    cardBody.appendChild(element)
+
+                    element = document.createElement("p")
+                    element.classList.add("card-text")
+                    element.innerText = message.message
+                    cardBody.appendChild(element)
+
+
+                    main.appendChild(card)
+                }
+            })
+            event.preventDefault()
+        })
+    </script>
 </body>
 
 </html>
